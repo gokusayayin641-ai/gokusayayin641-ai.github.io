@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -927,14 +927,14 @@
     transform: translateX(4px);
   }
 
-  /* ===== CTA FINAL ===== */
+  /* ===== CTA FINAL (gray) ===== */
   .final-cta {
-    background: transparent;
+    background: #1a1a1a;
     position: relative;
     overflow: hidden;
     text-align: center;
     padding: 110px 24px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .final-cta::before {
@@ -942,7 +942,7 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.05) 25%, transparent 55%);
+      radial-gradient(ellipse at 50% 50%, rgba(200, 200, 200, 0.10) 0%, rgba(200, 200, 200, 0.04) 25%, transparent 55%);
     pointer-events: none;
     z-index: 0;
   }
@@ -951,7 +951,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 100%, rgba(200, 200, 200, 0.06) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
@@ -963,30 +963,45 @@
     height: 80px;
     margin: 0 auto 24px;
     object-fit: contain;
-    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
+    filter: grayscale(1) drop-shadow(0 0 25px rgba(200, 200, 200, 0.35));
   }
 
   .final-cta h2 {
     font-family: 'Space Grotesk', sans-serif;
     font-size: clamp(1.8rem, 4.5vw, 3rem);
     font-weight: 800;
-    background: var(--gradient);
+    background: linear-gradient(135deg, #b8b8b8 0%, #f0f0f0 50%, #b8b8b8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 18px;
     letter-spacing: -0.025em;
     line-height: 1.1;
-    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.35));
+    filter: drop-shadow(0 0 25px rgba(200, 200, 200, 0.25));
     text-wrap: balance;
   }
 
   .final-cta p {
     font-size: 1.05rem;
-    color: var(--text-dim);
+    color: #a8a8a8;
     max-width: 620px;
     margin: 0 auto 32px;
     text-wrap: pretty;
+  }
+
+  .final-cta input[type="email"] {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(200, 200, 200, 0.25) !important;
+    color: #e0e0e0 !important;
+  }
+
+  .final-cta .btn-primary {
+    background: linear-gradient(135deg, #8a8a8a 0%, #c8c8c8 50%, #8a8a8a 100%) !important;
+    color: #111 !important;
+    box-shadow: 0 0 25px rgba(200, 200, 200, 0.25) !important;
+  }
+  .final-cta .btn-primary:hover {
+    box-shadow: 0 0 40px rgba(200, 200, 200, 0.45) !important;
   }
 
   /* ===== FOOTER ===== */
@@ -1275,11 +1290,11 @@
     <span class="nav-brand-text">CLOUDY&nbsp;SKY</span>
   </a>
   <div class="nav-links">
-    <a href="#about">Estudio</a>
-    <a href="#pillars">Filosofía</a>
+    <a href="#about">Studio</a>
+    <a href="#pillars">Philosophy</a>
     <a href="#catalog">Addons</a>
-    <a href="#markets">Comprar</a>
-    <a href="#contact" class="nav-cta">Contacto</a>
+    <a href="#markets">Buy</a>
+    <a href="#contact" class="nav-cta">Contact</a>
   </div>
 </nav>
 
@@ -1292,15 +1307,15 @@
     <div class="hero-text-block">
       <span class="badge">Premium Blender Addons · Studio</span>
       <h1>
-        Construimos lo que <span class="gradient-text">Blender</span><br>
-        aún no sabe que necesita.
+        We build what <span class="gradient-text">Blender</span><br>
+        doesn't yet know it needs.
       </h1>
       <p class="tagline">
-        Somos un estudio dedicado a <strong>extender Blender</strong> con herramientas avanzadas de calidad profesional. Refinamos sus puntos débiles, ampliamos sus límites y entregamos addons pensados para artistas que no se conforman con lo que existe.
+        We're a studio dedicated to <strong>extending Blender</strong> with advanced, professional-grade tools. We refine its weak spots, push its limits, and ship addons made for artists who won't settle for what already exists.
       </p>
       <div class="cta-row">
-        <a href="#catalog" class="btn btn-primary">Ver addons →</a>
-        <a href="#about" class="btn btn-secondary">Conocer el estudio</a>
+        <a href="#catalog" class="btn btn-primary">See addons →</a>
+        <a href="#about" class="btn btn-secondary">Meet the studio</a>
       </div>
     </div>
   </div>
@@ -1315,20 +1330,20 @@
         <img src="assets/logo.png" alt="" class="about-logo">
       </div>
       <div class="about-text reveal">
-        <div class="section-eyebrow">El estudio</div>
-        <h2 class="section-title">Crear no debería ser un privilegio.</h2>
+        <div class="section-eyebrow">The studio</div>
+        <h2 class="section-title">Creating shouldn't be a privilege.</h2>
         <div class="manifesto">
           <p>
-            En <strong>Cloudy Sky</strong> nos dedicamos a potenciar el ecosistema de Blender mediante el desarrollo de extensiones avanzadas que mejoran sus puntos más débiles y amplían sus capacidades.
+            At <strong>Cloudy Sky</strong> we're dedicated to strengthening the Blender ecosystem through advanced extensions that improve its weak spots and expand its capabilities.
           </p>
           <p>
-            Nuestro enfoque está en crear addons innovadores, diseñados para ofrecer <strong>herramientas de alto nivel accesibles para todos</strong>.
+            Our focus is on building innovative addons, designed to deliver <strong>high-end tools accessible to everyone</strong>.
           </p>
           <p>
-            Creemos en un entorno donde no tengas que depender de lo que aún no existe — sino que puedas construirlo. Con esa visión nace este proyecto, orientado a <strong>transformar la manera en que se crea dentro de Blender</strong>.
+            We believe in an environment where you don't have to depend on what doesn't exist yet — you can build it. From that vision, this project was born, aimed at <strong>transforming the way creation happens inside Blender</strong>.
           </p>
           <div class="manifesto-quote">
-            "Impulsar un futuro donde crear no sea un privilegio, sino una posibilidad al alcance de cualquiera."
+            "To drive a future where creating isn't a privilege, but a possibility within everyone's reach."
           </div>
         </div>
       </div>
@@ -1340,30 +1355,30 @@
 <section id="pillars">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-eyebrow">Filosofía</div>
-      <h2 class="section-title">Cuatro principios. Cero compromisos.</h2>
-      <p class="section-desc">Lo que guía cada línea de código y cada decisión de producto en Cloudy Sky.</p>
+      <div class="section-eyebrow">Philosophy</div>
+      <h2 class="section-title">Four principles. Zero compromises.</h2>
+      <p class="section-desc">What guides every line of code and every product decision at Cloudy Sky.</p>
     </div>
     <div class="pillars-grid">
       <div class="pillar reveal">
         <span class="pillar-num">/ 01</span>
-        <h3>Calidad profesional</h3>
-        <p>Construimos como si nuestros propios trabajos dependieran de ello — porque a menudo así es. Sin atajos, sin "suficientemente bueno".</p>
+        <h3>Professional quality</h3>
+        <p>We build as if our own work depended on it — because it often does. No shortcuts, no "good enough".</p>
       </div>
       <div class="pillar reveal">
         <span class="pillar-num">/ 02</span>
-        <h3>Privacidad real</h3>
-        <p>Tus archivos son tuyos. Procesamiento 100% local cuando es posible. Cero telemetría, cero subidas a la nube ocultas.</p>
+        <h3>Real privacy</h3>
+        <p>Your files are yours. 100% local processing whenever possible. Zero telemetry, zero hidden cloud uploads.</p>
       </div>
       <div class="pillar reveal">
         <span class="pillar-num">/ 03</span>
-        <h3>Sin suscripciones</h3>
-        <p>Pago único. Para siempre. Las herramientas que compras hoy seguirán funcionando mañana — sin ataduras y sin cuotas.</p>
+        <h3>No subscriptions</h3>
+        <p>One-time payment. Forever. The tools you buy today will keep working tomorrow — no strings, no fees.</p>
       </div>
       <div class="pillar reveal">
         <span class="pillar-num">/ 04</span>
-        <h3>Ecosistema abierto</h3>
-        <p>Trabajamos dentro de Blender, no contra él. Nuestros addons se sienten nativos: misma UX, mismos atajos, misma filosofía.</p>
+        <h3>Open ecosystem</h3>
+        <p>We work inside Blender, not against it. Our addons feel native: same UX, same shortcuts, same philosophy.</p>
       </div>
     </div>
   </div>
@@ -1375,11 +1390,11 @@
     <div class="stats-row">
       <div class="stat reveal">
         <div class="stat-value">3</div>
-        <div class="stat-label">Modelos de IA</div>
+        <div class="stat-label">AI Models</div>
       </div>
       <div class="stat reveal">
         <div class="stat-value">4×</div>
-        <div class="stat-label">Upscale Real</div>
+        <div class="stat-label">Real Upscale</div>
       </div>
       <div class="stat reveal">
         <div class="stat-value">100%</div>
@@ -1387,7 +1402,7 @@
       </div>
       <div class="stat reveal">
         <div class="stat-value">0</div>
-        <div class="stat-label">Suscripciones</div>
+        <div class="stat-label">Subscriptions</div>
       </div>
     </div>
   </div>
@@ -1397,9 +1412,9 @@
 <section class="catalog-wrap" id="catalog">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-eyebrow">Catálogo</div>
-      <h2 class="section-title">Addons que llevan Blender más lejos.</h2>
-      <p class="section-desc">Cada producto resuelve un problema real con la profundidad técnica que merece. Esto es lo que tenemos hoy — y lo que viene.</p>
+      <div class="section-eyebrow">Catalog</div>
+      <h2 class="section-title">Addons that take Blender further.</h2>
+      <p class="section-desc">Every product solves a real problem with the technical depth it deserves. This is what we have today — and what's coming.</p>
     </div>
 
     <div class="addon-grid">
@@ -1409,12 +1424,12 @@
         <div class="addon-info">
           <div class="addon-status">
             <span class="dot"></span>
-            <span>DISPONIBLE · v1.0</span>
+            <span>AVAILABLE · v1.0</span>
           </div>
           <h3 class="addon-name">Neural Upscaler X4</h3>
-          <p class="addon-tagline">Super-resolución por IA, dentro de Blender.</p>
+          <p class="addon-tagline">AI super-resolution, inside Blender.</p>
           <p class="addon-desc">
-            Upscaling 4× de imágenes con tres modelos de IA (Swin2SR, HAT, DAT). 100% offline, acelerado por CUDA, integrado nativamente en Blender 5.0+.
+            4× image upscaling with three AI models (Swin2SR, HAT, DAT). 100% offline, CUDA-accelerated, natively integrated into Blender 5.0+.
           </p>
           <div class="addon-tags">
             <span class="addon-tag">AI · CUDA</span>
@@ -1423,12 +1438,12 @@
             <span class="addon-tag">Offline</span>
           </div>
           <div class="addon-actions">
-            <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="addon-link primary">Comprar en Superhive →</a>
-            <a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener" class="addon-link secondary">Ver en BlenderKit</a>
+            <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="addon-link primary">Buy on Superhive →</a>
+            <a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener" class="addon-link secondary">View on BlenderKit</a>
           </div>
         </div>
         <div class="addon-visual addon-visual--image">
-          <img src="assets/neural-upscaler-x4.png" alt="Neural Upscaler X4 — antes y después" class="addon-visual-img">
+          <img src="assets/neural-upscaler-x4.png" alt="Neural Upscaler X4 — before and after" class="addon-visual-img">
         </div>
       </div>
 
@@ -1437,19 +1452,19 @@
         <div class="addon-info">
           <div class="addon-status coming">
             <span class="dot"></span>
-            <span>EN DESARROLLO</span>
+            <span>IN DEVELOPMENT</span>
           </div>
-          <h3 class="addon-name">Próximo lanzamiento</h3>
-          <p class="addon-tagline">Algo grande está construyéndose.</p>
+          <h3 class="addon-name">Next release</h3>
+          <p class="addon-tagline">Something big is being built.</p>
           <p class="addon-desc">
-            Estamos trabajando en la siguiente herramienta. Si quieres ser de los primeros en saberlo cuando esté lista, escríbenos.
+            We're working on the next tool. If you want to be among the first to know when it's ready, drop us a line.
           </p>
           <div class="addon-tags">
             <span class="addon-tag">2026</span>
             <span class="addon-tag">TBA</span>
           </div>
           <div class="addon-actions">
-            <a href="#contact" class="addon-link secondary">Avisarme</a>
+            <a href="#contact" class="addon-link secondary">Notify me</a>
           </div>
         </div>
         <div class="addon-visual">
@@ -1468,16 +1483,16 @@
 <section class="markets-wrap" id="markets">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-eyebrow">Dónde comprar</div>
-      <h2 class="section-title">Disponibles en los marketplaces que ya usas.</h2>
-      <p class="section-desc">Nuestros addons se distribuyen a través de las plataformas oficiales de Blender. Compra una vez, recibe actualizaciones para siempre.</p>
+      <div class="section-eyebrow">Where to buy</div>
+      <h2 class="section-title">Available on the marketplaces you already use.</h2>
+      <p class="section-desc">Our addons are distributed through Blender's official platforms. Buy once, get updates forever.</p>
     </div>
     <div class="markets-grid">
       <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="market-card reveal">
         <div class="market-icon">SH</div>
         <div class="market-content">
           <div class="market-name">Superhive</div>
-          <div class="market-sub">Marketplace oficial — ver Neural Upscaler X4</div>
+          <div class="market-sub">Official marketplace — see Neural Upscaler X4</div>
         </div>
         <div class="market-arrow">↗</div>
       </a>
@@ -1485,7 +1500,7 @@
         <div class="market-icon">BK</div>
         <div class="market-content">
           <div class="market-name">BlenderKit</div>
-          <div class="market-sub">Nuestro perfil oficial dentro de Blender</div>
+          <div class="market-sub">Our official profile inside Blender</div>
         </div>
         <div class="market-arrow">↗</div>
       </a>
@@ -1497,13 +1512,13 @@
 <section class="final-cta" id="contact">
   <div class="container">
     <img src="assets/logo.png" alt="" class="small-logo">
-    <h2>Construye sin esperar.<br>Crea sin permiso.</h2>
+    <h2>Build without waiting.<br>Create without permission.</h2>
     <p>
-      Si trabajas en Blender y quieres mantenerte al día con nuestros lanzamientos, beta tests y notas de desarrollo — déjanos tu email. <strong>Sin spam. Solo cuando hay algo que importa.</strong>
+      If you work in Blender and want to stay up to date with our releases, beta tests and development notes — leave your email. <strong>No spam. Only when something actually matters.</strong>
     </p>
-    <form class="cta-row" style="max-width: 480px; margin: 0 auto; flex-wrap: nowrap;" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Suscrito';">
-      <input type="email" required placeholder="tu@correo.com" style="flex:1; padding: 14px 22px; border-radius: 999px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212, 175, 55, 0.25); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: all 0.25s ease;" onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 20px rgba(212, 175, 55, 0.25)'" onblur="this.style.borderColor='rgba(212, 175, 55, 0.25)'; this.style.boxShadow='none'">
-      <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Suscribirme</button>
+    <form class="cta-row" style="max-width: 480px; margin: 0 auto; flex-wrap: nowrap;" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed';">
+      <input type="email" required placeholder="your@email.com" style="flex:1; padding: 14px 22px; border-radius: 999px; font-size: 14px; font-family: inherit; outline: none; transition: all 0.25s ease;" onfocus="this.style.borderColor='#c8c8c8'; this.style.boxShadow='0 0 20px rgba(200, 200, 200, 0.25)'" onblur="this.style.borderColor='rgba(200, 200, 200, 0.25)'; this.style.boxShadow='none'">
+      <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Subscribe</button>
     </form>
   </div>
 </section>
@@ -1516,34 +1531,34 @@
         <img src="assets/logo.png" alt="Cloudy Sky">
         <span class="footer-brand-name">CLOUDY&nbsp;SKY</span>
       </div>
-      <p class="footer-tagline">Estudio independiente de addons premium para Blender. Construyendo el futuro del 3D, una herramienta a la vez.</p>
+      <p class="footer-tagline">Independent studio of premium Blender addons. Building the future of 3D, one tool at a time.</p>
     </div>
     <div class="footer-col">
-      <h4>Productos</h4>
+      <h4>Products</h4>
       <ul>
         <li><a href="#catalog">Neural Upscaler X4</a></li>
-        <li><a href="#catalog">Próximamente</a></li>
+        <li><a href="#catalog">Coming soon</a></li>
         <li><a href="#catalog">Roadmap</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Comprar</h4>
+      <h4>Buy</h4>
       <ul>
         <li><a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener">Superhive</a></li>
         <li><a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener">BlenderKit</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Estudio</h4>
+      <h4>Studio</h4>
       <ul>
-        <li><a href="#about">Sobre nosotros</a></li>
-        <li><a href="#contact">Contacto</a></li>
-        <li><a href="#contact">Soporte</a></li>
+        <li><a href="#about">About us</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#contact">Support</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <div>© 2026 <span class="accent">CLOUDY SKY</span> · Todos los derechos reservados</div>
+    <div>© 2026 <span class="accent">CLOUDY SKY</span> · All rights reserved</div>
     <div>Crafted for Blender artists ✦</div>
   </div>
 </footer>
