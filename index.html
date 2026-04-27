@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLOUDY SKY · Premium Blender Addons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000000;
+    --bg-alt: #050505;
+    --bg-card: #0a0a0a;
+    --bg-card-hover: #131313;
+    --text: #ffffff;
+    --text-dim: #a1a1a1;
+    --text-muted: #555555;
+    --gold: #d4af37;
+    --gold-bright: #f0cf65;
+    --gold-light: #f5e6a8;
+    --gold-deep: #a8852a;
+    --gold-dark: #4a3a14;
+    --accent: var(--gold);
+    --accent-2: var(--gold-bright);
+    --accent-3: var(--gold-light);
+    --border: rgba(212, 175, 55, 0.12);
+    --border-strong: rgba(212, 175, 55, 0.35);
+    --gradient: linear-gradient(135deg, #d4af37 0%, #f5e6a8 50%, #d4af37 100%);
+    --gradient-warm: linear-gradient(135deg, #a8852a 0%, #d4af37 50%, #f0cf65 100%);
+    --bloom-gold: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 60px rgba(212, 175, 55, 0.25), 0 0 100px rgba(212, 175, 55, 0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* ===== GLOBAL CURSOR GLOW ===== */
+  .cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(240, 207, 101, 0.22) 0%, rgba(212, 175, 55, 0.12) 25%, rgba(212, 175, 55, 0.04) 50%, transparent 70%);
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    mix-blend-mode: screen;
+    filter: blur(40px);
+    will-change: transform;
+    opacity: 1;
+  }
+
+  /* ===== PARTICLES BG ===== */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.7;
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  nav.scrolled {
+    border-bottom-color: var(--border);
+    background: rgba(0,0,0,0.78);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+  }
+
+  .nav-brand-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--gold-light); }
+
+  .nav-cta {
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: var(--gold-light) !important;
+    transition: all 0.25s ease;
+  }
+  .nav-cta:hover {
+    background: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+
+  @media (max-width: 720px) {
+    nav { padding: 14px 20px; }
+    .nav-links { gap: 16px; }
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 60px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+    opacity: 0.4;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 980px; }
+
+  .hero-logo-wrap {
+    width: clamp(280px, 38vw, 420px);
+    height: clamp(280px, 38vw, 420px);
+    margin: 0 auto -60px;
+    position: relative;
+    animation: floatLogo 6s ease-in-out infinite;
+  }
+
+  @keyframes floatLogo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .hero-logo-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(circle, rgba(240, 207, 101, 0.35) 0%, rgba(212, 175, 55, 0.15) 35%, transparent 65%);
+    filter: blur(30px);
+    z-index: 0;
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
+  .hero-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.4));
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 6.5vw, 5rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    margin-bottom: 22px;
+  }
+
+  .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p.tagline {
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    color: var(--text-dim);
+    max-width: 720px;
+    margin: 0 auto 32px;
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+
+  .hero p.tagline strong { color: var(--gold-light); font-weight: 500; }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14.5px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--gradient);
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bloom-gold);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold-light);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+    transform: translateY(-2px);
+  }
+
+  /* Hero scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    animation: bounce 2.4s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 90px 24px; position: relative; z-index: 2; }
+
+  .section-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 56px;
+  }
+
+  .section-eyebrow {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    text-wrap: balance;
+  }
+
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    text-wrap: pretty;
+  }
+
+  /* ===== MANIFESTO / ABOUT ===== */
+  .about-wrap {
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+    opacity: 0.4;
+    z-index: 2;
+  }
+
+  .about-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 0% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 100% 50%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 64px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 880px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  .about-visual {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 60%);
+    filter: blur(40px);
+  }
+
+  .about-logo {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.4));
+  }
+
+  .about-text { position: relative; z-index: 1; }
+
+  .about-text .section-eyebrow,
+  .about-text .section-title { text-align: left; margin-left: 0; }
+
+  .about-text .section-title { margin-bottom: 24px; }
+
+  .manifesto p {
+    color: var(--text-dim);
+    font-size: 1.02rem;
+    margin-bottom: 18px;
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .manifesto p strong {
+    color: var(--gold-light);
+    font-weight: 500;
+  }
+
+  .manifesto-quote {
+    margin-top: 28px;
+    padding: 20px 24px;
+    border-left: 2px solid var(--gold);
+    background: rgba(212, 175, 55, 0.04);
+    border-radius: 0 12px 12px 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gold-light);
+    line-height: 1.5;
+  }
+
+  /* ===== PILLARS ===== */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pillar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(240, 207, 101, 0.15), rgba(212, 175, 55, 0.05) 30%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .pillar:hover::before { opacity: 1; }
+  .pillar > * { position: relative; z-index: 1; }
+
+  .pillar:hover {
+    transform: translateY(-6px);
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: var(--bloom-gold);
+  }
+
+  .pillar-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 18px;
+    display: block;
+  }
+
+  .pillar h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .pillar p {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+
+  /* ===== ADDONS / CATALOG ===== */
+  .catalog-wrap { background: transparent; }
+
+  .addon-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .addon-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: stretch;
+  }
+
+  @media (max-width: 820px) {
+    .addon-card { grid-template-columns: 1fr; min-height: 0; }
+  }
+
+  .addon-card.coming {
+    opacity: 0.85;
+    border-style: dashed;
+  }
+
+  .addon-card:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: var(--bloom-gold);
+    transform: translateY(-4px);
+  }
+
+  .addon-card.coming:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.18);
+    transform: translateY(-2px);
+  }
+
+  .addon-info {
+    padding: 38px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media (max-width: 820px) {
+    .addon-info { padding: 30px 26px; }
+  }
+
+  .addon-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .addon-status .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold-bright);
+    box-shadow: 0 0 12px rgba(240, 207, 101, 0.9);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+
+  .addon-status.coming .dot {
+    background: #6b6b6b;
+    box-shadow: none;
+    animation: none;
+  }
+
+  .addon-status.coming { color: var(--text-muted); }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .addon-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .addon-tagline {
+    color: var(--gold-light);
+    font-size: 14px;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+
+  .addon-desc {
+    color: var(--text-dim);
+    font-size: 14.5px;
+    margin-bottom: 22px;
+    line-height: 1.65;
+  }
+
+  .addon-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+
+  .addon-tag {
+    padding: 4px 11px;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+  }
+
+  .addon-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .addon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .addon-link.primary {
+    background: var(--gradient);
+    color: #000;
+  }
+  .addon-link.primary:hover {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .addon-link.secondary {
+    background: transparent;
+    color: var(--gold-light);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  .addon-link.secondary:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  /* Addon visual placeholder */
+  .addon-visual {
+    position: relative;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.18) 0%, transparent 65%),
+      linear-gradient(135deg, #060606 0%, #0e0e0e 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--border);
+  }
+
+  @media (max-width: 820px) {
+    .addon-visual {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      aspect-ratio: 16/9;
+    }
+  }
+
+  .addon-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(212, 175, 55, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 175, 55, 0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 75%);
+  }
+
+  .addon-visual--image {
+    padding: 0;
+    background: #000;
+    aspect-ratio: 2 / 1;
+    width: 100%;
+  }
+  .addon-visual--image::before { display: none; }
+  .addon-visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .addon-card:hover .addon-visual-img { transform: scale(1.03); }
+
+  @media (max-width: 820px) {
+    .addon-visual--image { aspect-ratio: 2 / 1; }
+  }
+
+  .addon-visual-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .addon-visual-icon {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.4));
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-bottom: 12px;
+  }
+
+  .addon-visual-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .addon-card.coming .addon-visual-icon {
+    background: linear-gradient(135deg, #555 0%, #888 50%, #555 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.05));
+  }
+
+  /* ===== STATS ===== */
+  .stats-wrap {
+    background: rgba(5,5,5,0.55);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 24px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .stat {
+    padding: 12px;
+  }
+
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    font-weight: 600;
+  }
+
+  /* ===== MARKETPLACES ===== */
+  .markets-wrap { background: transparent; }
+
+  .markets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .market-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 26px;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .market-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(240, 207, 101, 0.15), transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .market-card:hover::before { opacity: 1; }
+  .market-card > * { position: relative; z-index: 1; }
+
+  .market-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 175, 55, 0.45);
+    box-shadow: var(--bloom-gold);
+  }
+
+  .market-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--gold-light);
+  }
+
+  .market-content { flex: 1; }
+
+  .market-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .market-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .market-arrow {
+    color: var(--gold);
+    font-size: 18px;
+    transition: transform 0.25s ease;
+  }
+
+  .market-card:hover .market-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ===== CTA FINAL ===== */
+  .final-cta {
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 110px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.05) 25%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .final-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .final-cta .container { position: relative; z-index: 3; }
+
+  .final-cta .small-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
+  }
+
+  .final-cta h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 4.5vw, 3rem);
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 18px;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.35));
+    text-wrap: balance;
+  }
+
+  .final-cta p {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 620px;
+    margin: 0 auto 32px;
+    text-wrap: pretty;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 50px 24px 32px;
+    background: #000;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 720px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+    .footer-brand-col { grid-column: 1 / -1; }
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .footer-brand img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+  }
+
+  .footer-brand-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-tagline {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col li {
+    padding: 5px 0;
+  }
+
+  .footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13.5px;
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover { color: var(--gold-light); }
+
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-muted);
+    font-size: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-bottom .accent { color: var(--gold); }
+
+  /* ===== TWEAKS PANEL ===== */
+  .tweaks-panel {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 280px;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 18px;
+    z-index: 9998;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(212, 175, 55, 0.15);
+    display: none;
+    font-size: 13px;
+  }
+
+  .tweaks-panel.open { display: block; }
+
+  .tweaks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tweaks-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold-light);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .tweaks-close {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  .tweaks-close:hover { color: var(--gold-light); background: rgba(212, 175, 55, 0.1); }
+
+  .tweak-row {
+    margin-bottom: 14px;
+  }
+
+  .tweak-label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .tweak-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tweak-opt {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 11.5px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .tweak-opt.active {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: rgba(212, 175, 55, 0.5);
+    color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+  }
+
+  .tweak-opt:hover:not(.active) {
+    border-color: rgba(212, 175, 55, 0.3);
+    color: var(--text);
+  }
+
+  /* ===== ACCENT VARIANTS ===== */
+  body[data-accent="silver"] {
+    --gold: #c0c0c8;
+    --gold-bright: #e8e8f0;
+    --gold-light: #f4f4fa;
+    --gold-deep: #8a8a92;
+    --gradient: linear-gradient(135deg, #c0c0c8 0%, #f4f4fa 50%, #c0c0c8 100%);
+    --gradient-warm: linear-gradient(135deg, #8a8a92 0%, #c0c0c8 50%, #e8e8f0 100%);
+    --border: rgba(192, 192, 200, 0.12);
+    --border-strong: rgba(192, 192, 200, 0.35);
+    --bloom-gold: 0 0 20px rgba(192, 192, 200, 0.5), 0 0 60px rgba(192, 192, 200, 0.25), 0 0 100px rgba(192, 192, 200, 0.1);
+  }
+
+  body[data-accent="copper"] {
+    --gold: #c87533;
+    --gold-bright: #e89856;
+    --gold-light: #f5b984;
+    --gold-deep: #8a4a18;
+    --gradient: linear-gradient(135deg, #c87533 0%, #f5b984 50%, #c87533 100%);
+    --gradient-warm: linear-gradient(135deg, #8a4a18 0%, #c87533 50%, #e89856 100%);
+    --border: rgba(200, 117, 51, 0.14);
+    --border-strong: rgba(200, 117, 51, 0.4);
+    --bloom-gold: 0 0 20px rgba(200, 117, 51, 0.55), 0 0 60px rgba(200, 117, 51, 0.3), 0 0 100px rgba(200, 117, 51, 0.12);
+  }
+
+  /* ===== DENSITY VARIANTS ===== */
+  body[data-density="compact"] section { padding: 60px 24px; }
+  body[data-density="compact"] .hero { min-height: 90vh; padding: 100px 24px 50px; }
+  body[data-density="compact"] .hero-logo-wrap { width: clamp(220px, 28vw, 320px); height: clamp(220px, 28vw, 320px); margin-bottom: 24px; }
+  body[data-density="compact"] .section-header { margin-bottom: 40px; }
+
+  body[data-density="airy"] section { padding: 130px 24px; }
+  body[data-density="airy"] .hero-logo-wrap { width: clamp(340px, 45vw, 520px); height: clamp(340px, 45vw, 520px); margin-bottom: 48px; }
+
+  /* ===== HERO VARIANT ===== */
+  body[data-hero="split"] .hero {
+    text-align: left;
+  }
+  body[data-hero="split"] .hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 48px;
+    max-width: 1100px;
+  }
+  body[data-hero="split"] .hero-logo-wrap {
+    margin: 0;
+    width: 320px;
+    height: 320px;
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+  }
+  body[data-hero="split"] .hero-text-block {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+  body[data-hero="split"] .cta-row { justify-content: flex-start; }
+  body[data-hero="split"] .badge { margin-top: 0; }
+
+  @media (max-width: 880px) {
+    body[data-hero="split"] .hero { text-align: center; }
+    body[data-hero="split"] .hero-content { grid-template-columns: 1fr; }
+    body[data-hero="split"] .hero-logo-wrap {
+      grid-row: 1; grid-column: 1;
+      margin: 0 auto 24px;
+      width: 200px; height: 200px;
+    }
+    body[data-hero="split"] .hero-text-block { grid-row: 2; grid-column: 1; }
+    body[data-hero="split"] .cta-row { justify-content: center; }
+  }
+
+  /* Particles */
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 6px var(--gold);
+  }
+</style>
+</head>
+<body data-accent="gold" data-density="normal" data-hero="centered">
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="particles" id="particles"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#top" class="nav-brand">
+    <img src="assets/logo.png" alt="Cloudy Sky" class="nav-logo">
+    <span class="nav-brand-text">CLOUDY&nbsp;SKY</span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">Estudio</a>
+    <a href="#pillars">Filosofía</a>
+    <a href="#catalog">Addons</a>
+    <a href="#markets">Comprar</a>
+    <a href="#contact" class="nav-cta">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-logo-wrap">
+      <img src="assets/logo.png" alt="Cloudy Sky logo" class="hero-logo">
+    </div>
+    <div class="hero-text-block">
+      <span class="badge">Premium Blender Addons · Studio</span>
+      <h1>
+        Construimos lo que <span class="gradient-text">Blender</span><br>
+        aún no sabe que necesita.
+      </h1>
+      <p class="tagline">
+        Somos un estudio dedicado a <strong>extender Blender</strong> con herramientas avanzadas de calidad profesional. Refinamos sus puntos débiles, ampliamos sus límites y entregamos addons pensados para artistas que no se conforman con lo que existe.
+      </p>
+      <div class="cta-row">
+        <a href="#catalog" class="btn btn-primary">Ver addons →</a>
+        <a href="#about" class="btn btn-secondary">Conocer el estudio</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">SCROLL ↓</div>
+</section>
+
+<!-- ABOUT / MANIFESTO -->
+<section class="about-wrap" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <img src="assets/logo.png" alt="" class="about-logo">
+      </div>
+      <div class="about-text reveal">
+        <div class="section-eyebrow">El estudio</div>
+        <h2 class="section-title">Crear no debería ser un privilegio.</h2>
+        <div class="manifesto">
+          <p>
+            En <strong>Cloudy Sky</strong> nos dedicamos a potenciar el ecosistema de Blender mediante el desarrollo de extensiones avanzadas que mejoran sus puntos más débiles y amplían sus capacidades.
+          </p>
+          <p>
+            Nuestro enfoque está en crear addons innovadores, diseñados para ofrecer <strong>herramientas de alto nivel accesibles para todos</strong>.
+          </p>
+          <p>
+            Creemos en un entorno donde no tengas que depender de lo que aún no existe — sino que puedas construirlo. Con esa visión nace este proyecto, orientado a <strong>transformar la manera en que se crea dentro de Blender</strong>.
+          </p>
+          <div class="manifesto-quote">
+            "Impulsar un futuro donde crear no sea un privilegio, sino una posibilidad al alcance de cualquiera."
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Filosofía</div>
+      <h2 class="section-title">Cuatro principios. Cero compromisos.</h2>
+      <p class="section-desc">Lo que guía cada línea de código y cada decisión de producto en Cloudy Sky.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <span class="pillar-num">/ 01</span>
+        <h3>Calidad profesional</h3>
+        <p>Construimos como si nuestros propios trabajos dependieran de ello — porque a menudo así es. Sin atajos, sin "suficientemente bueno".</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-num">/ 02</span>
+        <h3>Privacidad real</h3>
+        <p>Tus archivos son tuyos. Procesamiento 100% local cuando es posible. Cero telemetría, cero subidas a la nube ocultas.</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-num">/ 03</span>
+        <h3>Sin suscripciones</h3>
+        <p>Pago único. Para siempre. Las herramientas que compras hoy seguirán funcionando mañana — sin ataduras y sin cuotas.</p>
+      </div>
+      <div class="pillar reveal">
+        <span class="pillar-num">/ 04</span>
+        <h3>Ecosistema abierto</h3>
+        <p>Trabajamos dentro de Blender, no contra él. Nuestros addons se sienten nativos: misma UX, mismos atajos, misma filosofía.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-wrap">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat reveal">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Modelos de IA</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-value">4×</div>
+        <div class="stat-label">Upscale Real</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Offline</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-value">0</div>
+        <div class="stat-label">Suscripciones</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="catalog-wrap" id="catalog">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Catálogo</div>
+      <h2 class="section-title">Addons que llevan Blender más lejos.</h2>
+      <p class="section-desc">Cada producto resuelve un problema real con la profundidad técnica que merece. Esto es lo que tenemos hoy — y lo que viene.</p>
+    </div>
+
+    <div class="addon-grid">
+
+      <!-- Neural Upscaler X4 -->
+      <div class="addon-card reveal">
+        <div class="addon-info">
+          <div class="addon-status">
+            <span class="dot"></span>
+            <span>DISPONIBLE · v1.0</span>
+          </div>
+          <h3 class="addon-name">Neural Upscaler X4</h3>
+          <p class="addon-tagline">Super-resolución por IA, dentro de Blender.</p>
+          <p class="addon-desc">
+            Upscaling 4× de imágenes con tres modelos de IA (Swin2SR, HAT, DAT). 100% offline, acelerado por CUDA, integrado nativamente en Blender 5.0+.
+          </p>
+          <div class="addon-tags">
+            <span class="addon-tag">AI · CUDA</span>
+            <span class="addon-tag">Blender 5.0+</span>
+            <span class="addon-tag">Windows</span>
+            <span class="addon-tag">Offline</span>
+          </div>
+          <div class="addon-actions">
+            <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="addon-link primary">Comprar en Superhive →</a>
+            <a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener" class="addon-link secondary">Ver en BlenderKit</a>
+          </div>
+        </div>
+        <div class="addon-visual addon-visual--image">
+          <img src="assets/neural-upscaler-x4.png" alt="Neural Upscaler X4 — antes y después" class="addon-visual-img">
+        </div>
+      </div>
+
+      <!-- Coming soon slot 1 -->
+      <div class="addon-card coming reveal">
+        <div class="addon-info">
+          <div class="addon-status coming">
+            <span class="dot"></span>
+            <span>EN DESARROLLO</span>
+          </div>
+          <h3 class="addon-name">Próximo lanzamiento</h3>
+          <p class="addon-tagline">Algo grande está construyéndose.</p>
+          <p class="addon-desc">
+            Estamos trabajando en la siguiente herramienta. Si quieres ser de los primeros en saberlo cuando esté lista, escríbenos.
+          </p>
+          <div class="addon-tags">
+            <span class="addon-tag">2026</span>
+            <span class="addon-tag">TBA</span>
+          </div>
+          <div class="addon-actions">
+            <a href="#contact" class="addon-link secondary">Avisarme</a>
+          </div>
+        </div>
+        <div class="addon-visual">
+          <div class="addon-visual-content">
+            <div class="addon-visual-icon">···</div>
+            <div class="addon-visual-meta">COMING · SOON</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MARKETPLACES -->
+<section class="markets-wrap" id="markets">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Dónde comprar</div>
+      <h2 class="section-title">Disponibles en los marketplaces que ya usas.</h2>
+      <p class="section-desc">Nuestros addons se distribuyen a través de las plataformas oficiales de Blender. Compra una vez, recibe actualizaciones para siempre.</p>
+    </div>
+    <div class="markets-grid">
+      <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="market-card reveal">
+        <div class="market-icon">SH</div>
+        <div class="market-content">
+          <div class="market-name">Superhive</div>
+          <div class="market-sub">Marketplace oficial — ver Neural Upscaler X4</div>
+        </div>
+        <div class="market-arrow">↗</div>
+      </a>
+      <a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener" class="market-card reveal">
+        <div class="market-icon">BK</div>
+        <div class="market-content">
+          <div class="market-name">BlenderKit</div>
+          <div class="market-sub">Nuestro perfil oficial dentro de Blender</div>
+        </div>
+        <div class="market-arrow">↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="contact">
+  <div class="container">
+    <img src="assets/logo.png" alt="" class="small-logo">
+    <h2>Construye sin esperar.<br>Crea sin permiso.</h2>
+    <p>
+      Si trabajas en Blender y quieres mantenerte al día con nuestros lanzamientos, beta tests y notas de desarrollo — déjanos tu email. <strong>Sin spam. Solo cuando hay algo que importa.</strong>
+    </p>
+    <form class="cta-row" style="max-width: 480px; margin: 0 auto; flex-wrap: nowrap;" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Suscrito';">
+      <input type="email" required placeholder="tu@correo.com" style="flex:1; padding: 14px 22px; border-radius: 999px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212, 175, 55, 0.25); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: all 0.25s ease;" onfocus="this.style.borderColor='var(--gold)'; this.style.boxShadow='0 0 20px rgba(212, 175, 55, 0.25)'" onblur="this.style.borderColor='rgba(212, 175, 55, 0.25)'; this.style.boxShadow='none'">
+      <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Suscribirme</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="Cloudy Sky">
+        <span class="footer-brand-name">CLOUDY&nbsp;SKY</span>
+      </div>
+      <p class="footer-tagline">Estudio independiente de addons premium para Blender. Construyendo el futuro del 3D, una herramienta a la vez.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#catalog">Neural Upscaler X4</a></li>
+        <li><a href="#catalog">Próximamente</a></li>
+        <li><a href="#catalog">Roadmap</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Comprar</h4>
+      <ul>
+        <li><a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener">Superhive</a></li>
+        <li><a href="https://www.blenderkit.com/?query=author_id:490075" target="_blank" rel="noopener">BlenderKit</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Estudio</h4>
+      <ul>
+        <li><a href="#about">Sobre nosotros</a></li>
+        <li><a href="#contact">Contacto</a></li>
+        <li><a href="#contact">Soporte</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 <span class="accent">CLOUDY SKY</span> · Todos los derechos reservados</div>
+    <div>Crafted for Blender artists ✦</div>
+  </div>
+</footer>
+
+<!-- TWEAKS PANEL -->
+<div class="tweaks-panel" id="tweaksPanel">
+  <div class="tweaks-header">
+    <div class="tweaks-title">Tweaks</div>
+    <button class="tweaks-close" onclick="closeTweaks()">×</button>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">Acento</label>
+    <div class="tweak-options" data-tweak="accent">
+      <button class="tweak-opt active" data-value="gold">Oro</button>
+      <button class="tweak-opt" data-value="silver">Plata</button>
+      <button class="tweak-opt" data-value="copper">Cobre</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">Densidad</label>
+    <div class="tweak-options" data-tweak="density">
+      <button class="tweak-opt" data-value="compact">Compacta</button>
+      <button class="tweak-opt active" data-value="normal">Normal</button>
+      <button class="tweak-opt" data-value="airy">Aireada</button>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <label class="tweak-label">Hero</label>
+    <div class="tweak-options" data-tweak="hero">
+      <button class="tweak-opt active" data-value="centered">Centrado</button>
+      <button class="tweak-opt" data-value="split">Dividido</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // === Persisted Tweaks (host-rewritable) ===
+  const TWEAKS = /*EDITMODE-BEGIN*/{
+    "accent": "gold",
+    "density": "normal",
+    "hero": "centered"
+  }/*EDITMODE-END*/;
+
+  function applyTweaks(t) {
+    document.body.dataset.accent = t.accent;
+    document.body.dataset.density = t.density;
+    document.body.dataset.hero = t.hero;
+    document.querySelectorAll('.tweak-options').forEach(group => {
+      const key = group.dataset.tweak;
+      group.querySelectorAll('.tweak-opt').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.value === t[key]);
+      });
+    });
+  }
+  applyTweaks(TWEAKS);
+
+  // === Tweaks panel host integration ===
+  const panel = document.getElementById('tweaksPanel');
+  window.addEventListener('message', (e) => {
+    if (!e.data) return;
+    if (e.data.type === '__activate_edit_mode') panel.classList.add('open');
+    else if (e.data.type === '__deactivate_edit_mode') panel.classList.remove('open');
+  });
+  window.parent.postMessage({type: '__edit_mode_available'}, '*');
+
+  function closeTweaks() {
+    panel.classList.remove('open');
+    window.parent.postMessage({type: '__edit_mode_dismissed'}, '*');
+  }
+
+  document.querySelectorAll('.tweak-options').forEach(group => {
+    group.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tweak-opt');
+      if (!btn) return;
+      const key = group.dataset.tweak;
+      const val = btn.dataset.value;
+      TWEAKS[key] = val;
+      applyTweaks(TWEAKS);
+      window.parent.postMessage({type: '__edit_mode_set_keys', edits: {[key]: val}}, '*');
+    });
+  });
+
+  // === Cursor glow ===
+  const glow = document.getElementById('cursorGlow');
+  let glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
+  let targetX = glowX, targetY = glowY;
+  window.addEventListener('pointermove', (e) => {
+    targetX = e.clientX; targetY = e.clientY;
+  }, { passive: true });
+  function animateGlow() {
+    glowX += (targetX - glowX) * 0.12;
+    glowY += (targetY - glowY) * 0.12;
+    glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+
+  // === Card spotlight ===
+  document.querySelectorAll('.pillar, .market-card, .addon-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--mx', x + '%');
+      card.style.setProperty('--my', y + '%');
+    });
+  });
+
+  // === Scroll reveal ===
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // === Nav scroll state ===
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  // === Particles ===
+  const particlesContainer = document.getElementById('particles');
+  const PARTICLE_COUNT = 140;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 1 + Math.random() * 2.5;
+    p.style.width = p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    const dur = 8 + Math.random() * 10;
+    const delay = -Math.random() * dur;
+    p.style.animation = `particleFloat ${dur}s ease-in-out ${delay}s infinite`;
+    particlesContainer.appendChild(p);
+  }
+
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
+    @keyframes particleFloat {
+      0%, 100% { opacity: 0; transform: translate(0, 0); }
+      10% { opacity: 0.7; }
+      50% { opacity: 0.9; transform: translate(${Math.random() > 0.5 ? '+' : '-'}30px, -40px); }
+      90% { opacity: 0.4; }
+    }
+  `;
+  document.head.appendChild(styleEl);
+</script>
+
+</body>
+</html>
