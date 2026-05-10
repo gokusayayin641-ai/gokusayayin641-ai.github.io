@@ -999,9 +999,12 @@
     background: linear-gradient(135deg, #8a8a8a 0%, #c8c8c8 50%, #8a8a8a 100%) !important;
     color: #111 !important;
     box-shadow: 0 0 25px rgba(200, 200, 200, 0.25) !important;
+    transition: none !important;
+    cursor: default;
   }
   .final-cta .btn-primary:hover {
-    box-shadow: 0 0 40px rgba(200, 200, 200, 0.45) !important;
+    transform: none !important;
+    box-shadow: 0 0 25px rgba(200, 200, 200, 0.25) !important;
   }
 
   /* ===== FOOTER ===== */
@@ -1450,7 +1453,7 @@
       <p class="section-desc">Our addons are distributed through Blender's official platforms. Buy once, get updates forever.</p>
     </div>
     <div class="markets-grid">
-      <a href="https://superhivemarket.com/products/neural-upscaler-x4" target="_blank" rel="noopener" class="market-card reveal">
+      <a href="https://superhivemarket.com/creators/cloudy-sky" target="_blank" rel="noopener" class="market-card reveal">
         <div class="market-icon">SH</div>
         <div class="market-content">
           <div class="market-name">Superhive</div>
@@ -1478,7 +1481,7 @@
     <p>
       If you work in Blender and want to stay up to date with our releases, beta tests and development notes — leave your email. <strong>No spam. Only when something actually matters.</strong>
     </p>
-    <form class="cta-row" style="max-width: 480px; margin: 0 auto; flex-wrap: nowrap;" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed';">
+    <form class="cta-row" style="max-width: 480px; margin: 0 auto; flex-wrap: nowrap;" onsubmit="event.preventDefault();">
       <input type="email" required placeholder="your@email.com" style="flex:1; padding: 14px 22px; border-radius: 999px; font-size: 14px; font-family: inherit; outline: none; transition: all 0.25s ease;" onfocus="this.style.borderColor='#c8c8c8'; this.style.boxShadow='0 0 20px rgba(200, 200, 200, 0.25)'" onblur="this.style.borderColor='rgba(200, 200, 200, 0.25)'; this.style.boxShadow='none'">
       <button type="submit" class="btn btn-primary" style="white-space: nowrap;">Subscribe</button>
     </form>
