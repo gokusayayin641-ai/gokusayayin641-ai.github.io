@@ -757,6 +757,7 @@
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .addon-card:hover .addon-visual-img { transform: scale(1.03); }
+  .addon-visual-img--cover { object-fit: cover; }
 
   @media (max-width: 820px) {
     .addon-visual--image { aspect-ratio: 2 / 1; }
@@ -1403,7 +1404,7 @@
         <div class="addon-info">
           <div class="addon-status">
             <span class="dot"></span>
-            <span>AVAILABLE · v1.0</span>
+            <span>AVAILABLE · v3.1</span>
           </div>
           <h3 class="addon-name">Neural Upscaler X4</h3>
           <p class="addon-tagline">AI super-resolution, inside Blender.</p>
@@ -1449,7 +1450,31 @@
           </div>
         </div>
         <div class="addon-visual addon-visual--image">
-          <img src="assets/frosting.png" alt="Frosting" class="addon-visual-img">
+          <img src="assets/frosting.png" alt="Frosting" class="addon-visual-img addon-visual-img--cover">
+        </div>
+      </div>
+
+      <!-- SOL -->
+      <div class="addon-card coming reveal">
+        <div class="addon-info">
+          <div class="addon-status coming">
+            <span class="dot"></span>
+            <span>COMING SOON</span>
+          </div>
+          <h3 class="addon-name">SOL</h3>
+          <p class="addon-tagline">Glowing particle effects, one click away.</p>
+          <p class="addon-desc">
+            Eight ready-made particle presets — sparks, fire, fireworks, magic, fireflies, stardust and more — built on Blender's native particle system. Live editing, local forces, guide curves, glow and bake.
+          </p>
+          <div class="addon-tags">
+            <span class="addon-tag">Particles · FX</span>
+            <span class="addon-tag">Blender 4.2+</span>
+            <span class="addon-tag">EEVEE · Cycles</span>
+            <span class="addon-tag">8 presets</span>
+          </div>
+        </div>
+        <div class="addon-visual addon-visual--image">
+          <img src="assets/sol.jpg" alt="SOL — Particle Generator for Blender" class="addon-visual-img">
         </div>
       </div>
 
